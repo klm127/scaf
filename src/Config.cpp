@@ -6,6 +6,7 @@
 
 #include <filesystem>
 #include <Config.h>
+#include <json.hpp>
 
 /*!
     GetFullExePath is used to get the actual fs location of scaf. This is different from where the current working directory is. It's often referred to as the process working directory. Apparently pwd functions are not cross-platform in the built-in libraries, so directives are used to make scaf compatible on linux and windows. 

@@ -1,5 +1,6 @@
 #include "TemplateTest.cpp"
 #include <string>
+#include <iostream>
 
 /*!
     Runs the tests.
@@ -8,7 +9,7 @@
 
     test { template | all } { noisy | normal | quiet | silent }
 
-    Defaults to verbosity normal.
+    Defaults to normal verbosity and all tests.
 
 */
 int main(int argc, char ** argv) {
@@ -16,7 +17,7 @@ int main(int argc, char ** argv) {
     std::string test_choice;
     short verbosity = QUnit::normal;
     if(argc < 2) {
-        test_choice = "All";
+        test_choice = "all";
     }
     if(argc >= 2) {
         test_choice = std::string(argv[1]);
@@ -29,12 +30,18 @@ int main(int argc, char ** argv) {
             verbosity = QUnit::quiet;
         } else if (verbosity_string == "silent") {
             verbosity = QUnit::silent;
+        } else if(verbosity_string == "normal") {
+            verbosity = QUnit::normal;
+        } else {
+            cout << "\nCouldn't understand verbosity level of '" << verbosity_string << "'. Valid values are 'noisy', 'quiet' 'normal', and 'silent'. Using default 'normal'." ;
         }
     }
     if(test_choice == "template") {
         errors = TemplateTest(std::cerr, verbosity).run();
     } else if(test_choice == "all") {
         errors = TemplateTest(std::cerr, verbosity).run();
+    } else {
+        cout << "'" << test_choice << "' is not a valid test option. Try 'all'. \n";
     }
     return errors;
 }

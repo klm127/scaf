@@ -1,15 +1,30 @@
-build:
-	g++ -o bin/scaf -Wall -I src src/main.cpp src/Template.cpp src/Config.cpp
-
-run:
-	bin/scaf
-
-build_tests:
-	g++ -o test -Wall -I src src/Template.cpp tests/Qunit.hpp tests/testAll.cpp tests/TemplateTest.cpp
-
-test:
-	tests
+OBDIR = obj
+IFLAGS = -I src -I lib -I tests
+OBFLAGS = -c -Wall $(IFLAGS)
+RM = del /Q /F
 
 
+bin/scaf.exe: obj/Config.o obj/Template.o
+	g++ $(IFLAGS) obj/Config.o obj/Template.o src/json.hpp src/main.cpp -o bin/scaf
 
+obj/Config.o:
+	g++ $(OBFLAGS) -o $(OBDIR)/Config.o src/Config.cpp
 
+obj/Template.o:
+	g++ $(OBFLAGS) -o $(OBDIR)/Template.o src/Template.cpp
+
+obj/TemplateTest.o: obj/Template.o
+	g++ $(OBFLAGS) -o $(OBDIR)/TemplateTest.o tests/TemplateTest.cpp
+
+test: obj/TemplateTest.o
+	g++ $(IFLAGS) obj/TemplateTest.o obj/Template.o tests/QUnit.hpp tests/testAll.cpp -o test
+
+clean: 
+	-$(RM) test.exe
+	-$(RM) bin\\scaf.exe
+	-$(RM) obj\\*.o
+	-$(RM) tests\\*.gch
+
+folders:
+	mkdir bin
+	mkdir obj
