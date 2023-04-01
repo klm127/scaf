@@ -22,3 +22,37 @@ Scaf works by maintaining directories of templates that the user supplies. When 
 
 `scaf help` Get help about scaf.
 
+# Compiling, Running
+
+Run `make folders` To make the `/bin` and `/obj` folders.
+
+Run `make` to create `bin/scaf.exe`
+
+Run `make test` to create `./test.exe`
+
+Add the `bin` folder to your system path to access scaf from anywhere on your computer.
+
+# Configuration
+
+`scaf` will populate its own configuration. However, it is possible to manually edit `scaf.conf.json` if desired. This may be useful if you want to add a bunch of 'info' parameters at once, as templates without infos will be listed with empty strings. Shown below is an example configuration object.
+
+```json
+{
+    templateDir: "C:\\MyScafs",
+    infos: {
+        "js1": "A simple node JS project I set up.",
+        "cpp": "c++ with a basic makefile and unit testing framework.",
+        "js2": "A webpacked JS project.",
+        "ts": "A typescript and webpack project.",
+        "goserv": "A go server."
+    }
+
+}
+
+```
+
+# Dependencies
+
+`lib/QUnit.hpp` A lightweight C++ testing framework. [Project Homepage](https://qunit.sourceforge.net/)
+`lib/json.hpp` nlohmann/json's JSON parsing library. [Project Homepage](https://github.com/nlohmann/json)
+

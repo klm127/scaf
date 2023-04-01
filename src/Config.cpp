@@ -3,30 +3,81 @@
 #elif
 #include <unistd.h>
 #endif 
-
 #include <filesystem>
+#include <fstream>
+
 #include <Config.h>
 #include <json.hpp>
 
-/*!
-    GetFullExePath is used to get the actual fs location of scaf. This is different from where the current working directory is. It's often referred to as the process working directory. Apparently pwd functions are not cross-platform in the built-in libraries, so directives are used to make scaf compatible on linux and windows. 
+using json = nlohmann::json;
 
-    This is used to locate scaf's config in the same directory as scaf. 
-
-    \returns The folder containing scaf. 
-
-    From https://stackoverflow.com/questions/50889647/best-way-to-get-exe-folder-path
-*/
 fs::path GetFullExePath() {
 
 #ifdef _WIN32
-    wchar_t a_path[MAX_PATH];
-    GetModuleFileNameW(NULL, a_path, MAX_PATH);
+    wchar_t exe_path[MAX_PATH];
+    GetModuleFileNameW(NULL, exe_path, MAX_PATH);
 #else
     char a_path[PATH_MAX];
     ssize_t count = readLink( "/proc/self/exe" , a_path, PATH_MAX);
     szPath[count] = '\0';
 #endif 
 
-    return fs::path{ a_path }.parent_path();
+    return fs::path{ exe_path }.parent_path();
 }
+
+
+Config::Config() {
+    fs::path c_path = GetFullExePath();
+    c_path.append("scaf.config.json");
+    if(fs::exists(c_path)) {
+        if(fs::is_directory(c_path)) {
+            cout << "\nDirectory error!";
+            throw std::runtime_error(c_path.string() + " is a directory! Check the config folder!");
+        } 
+    } else { // Create the file if it doesn't exist.
+        FILE * tfile = fopen(c_path.string().c_str(), "w");
+        fputc('{', tfile);
+        fputc('}', tfile);
+        fclose(tfile);
+    }
+    configPath = c_path;
+    templateDir = fs::path();
+    infos = map<string, string>();
+}
+
+Config::Config(fs::path c_path) {
+    if(fs::exists(c_path)) {
+        if(fs::is_directory(c_path)) {
+            cout << "\nDirectory error!";
+            throw std::runtime_error(c_path.string() + " is a directory! Check the config folder!");
+        }
+    } else { // Create the file if it doesn't exist.
+        FILE * tfile = fopen(c_path.string().c_str(), "w");
+        fputc('{', tfile);
+        fputc('}', tfile);
+        fclose(tfile);
+    }
+    configPath = c_path;
+    templateDir = fs::path();
+    infos = map<string, string>();
+}
+
+fs::path Config::getPath() {
+    return configPath;
+}
+
+void Config::readConfig() {
+    ifstream file;
+    file.open(configPath);
+    json data = json::parse(file);
+    cout << data["templateDir"] << endl;
+}
+
+fs::path Config::getTemplateDir() {
+    return templateDir;
+}
+
+string Config::getInfo(string key) {
+    return infos[key];
+}
+

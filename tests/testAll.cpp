@@ -1,6 +1,7 @@
-#include "TemplateTest.cpp"
 #include <string>
 #include <iostream>
+#include "TemplateTest.cpp"
+#include "ConfigTest.cpp"
 
 /*!
     Runs the tests.
@@ -39,8 +40,10 @@ int main(int argc, char ** argv) {
     if(test_choice == "template") {
         errors = TemplateTest(std::cerr, verbosity).run();
     } else if(test_choice == "all") {
-        errors = TemplateTest(std::cerr, verbosity).run();
-    } else {
+        errors = TemplateTest(std::cerr, verbosity).run() + ConfigTest(std::cerr, verbosity).run();
+    } else if(test_choice == "config") {
+        errors = ConfigTest(std::cerr, verbosity).run();
+    }else {
         cout << "'" << test_choice << "' is not a valid test option. Try 'all'. \n";
     }
     return errors;
