@@ -1,0 +1,7 @@
+
+
+class Scaf {
+    public:
+
+    private:
+};
