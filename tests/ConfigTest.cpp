@@ -9,7 +9,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 const string tmp_conf = "./tests/testconf.json";
-const string tmp_tdir = "/tests/tmpl";
+const string tmp_tdir = "./tests/tmpl";
 
 class ConfigTest {
     QUnit::UnitTest qunit;
@@ -38,14 +38,23 @@ class ConfigTest {
 
             ofstream file;
             file.open(tmp_conf, ios::out);
-            file << "{\"templateDir\":\"";
-            file << tmp_tdir;
-            file << "\",";
+            file << "{\"templateDir\":\"./tests\",";
             file << "\"infos\":{";
             file << "\"js1\":\"someinfo\",";
             file << "\"cpp\":\"someinfo2\",";
-            file << "\"cpp2\":\"\"}";
+            file << "\"cpp2\":\"\"}}";
             file.close();
+
+            c.readConfig();
+
+            string res = c.getInfo("js1");
+            QUNIT_IS_EQUAL(res, "someinfo");
+            res = c.getInfo("cpp");
+            QUNIT_IS_EQUAL(res, "someinfo2");
+            res = c.getInfo("cpp2");
+            QUNIT_IS_EQUAL(res, "");
+            res = c.getInfo("unknown");
+            QUNIT_IS_EQUAL(res, "");
 
             remove(tmp_conf.c_str());
         }

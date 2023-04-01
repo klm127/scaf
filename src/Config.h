@@ -8,6 +8,11 @@
 using namespace std; 
 namespace fs = std::filesystem;
 
+/*! The JSON key for the template directory. Should key a string. */
+const string dirKey = "templateDir";
+/*! The JSON key for the saved infos. Should key an object where the keys for all values are strings. */
+const string infoKey = "infos";
+
 /*!
     GetFullExePath is used to get the actual fs location of scaf. This is different from where the current working directory is. It's often referred to as the process working directory. Apparently pwd functions are not cross-platform in the built-in libraries, so directives are used to make scaf compatible on linux and windows. 
 
@@ -46,7 +51,11 @@ class Config {
         /*! Returns the path that was loaded at the time of Config's construction. */
         fs::path getPath();
 
-        /*! Uses json library to read the configuration file. */
+        /*! Uses json library to read the configuration file. 
+
+            If the json object is misconfigured, it may simply skip parsing that step and print an error to the console.
+        
+        */
         void readConfig();
 
         /*! Returns the template directory read from the config file.*/

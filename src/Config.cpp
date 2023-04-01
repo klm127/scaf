@@ -26,6 +26,7 @@ fs::path GetFullExePath() {
 }
 
 
+
 Config::Config() {
     fs::path c_path = GetFullExePath();
     c_path.append("scaf.config.json");
@@ -67,10 +68,45 @@ fs::path Config::getPath() {
 }
 
 void Config::readConfig() {
+    json data;
     ifstream file;
     file.open(configPath);
-    json data = json::parse(file);
-    cout << data["templateDir"] << endl;
+    try {
+        data = json::parse(file);
+    } catch(const json::parse_error & ex) {
+        cout << "Configuration is not a valid json file! Can't parse!" << ex.what() << endl;
+        file.close();
+        return;
+    }
+    file.close();
+    if(data.contains(dirKey)) { // Parse the "templateDir" field of the configuration.
+        json dirval = data[dirKey];
+        if(!dirval.is_string()) {
+            cout << "Config Error: " << dirKey << " is not a string. Skipping.\n";
+        } else {
+            string dirsval = dirval.get<string>();
+            if(fs::is_directory(dirsval)) {
+                templateDir = fs::path(data[dirKey]);
+            } else {
+                cout << "Config Error: " << dirKey << " is not a valid directory. Skipping. \n";
+            }
+        }
+    };
+    if(data.contains(infoKey)) { // Parse the "infos" field of the configuration.
+        json infval = data[infoKey];
+        if(!infval.is_object()) {
+            cout << "Config Error: " << infoKey << " is not an object.\n";
+        } else {
+            for(auto& el : infval.items()) {
+                if(!el.value().is_string()) {
+                    cout << "Config Error: In " << infoKey << " " << el.key() << " is not a string. Skipping.\n";
+                } else {
+                    string elval = el.value().get<string>();
+                    infos[el.key()] = elval;
+                }
+            }            
+        }
+    }
 }
 
 fs::path Config::getTemplateDir() {
