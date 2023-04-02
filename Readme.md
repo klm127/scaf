@@ -10,9 +10,9 @@ Scaf works by maintaining directories of templates that the user supplies. When 
 
 # Links
 
-[YouTube Demo](https://www.youtube.com/watch?v=kLVdjXp3JyA)
-[Blog Post](https://quaffingcode.com/scaf)
-[Generated Documentation](http://www.quaffingcode.com/scaf/html/index.html)
+- [YouTube Demo](https://www.youtube.com/watch?v=kLVdjXp3JyA)
+- [Blog Post](https://www.quaffingcode.com/scaf-code-jam)
+- [Generated Documentation](http://www.quaffingcode.com/scaf/html/index.html)
 
 # Use Cases
 
