@@ -40,6 +40,7 @@ Config::Config() {
             throw std::runtime_error(c_path.string() + " is a directory! Check the config folder!");
         } 
     } else { // Create the file if it doesn't exist.
+        
         FILE * tfile = fopen(c_path.string().c_str(), "w");
         fputc('{', tfile);
         fputc('}', tfile);
@@ -96,6 +97,13 @@ string Config::getInfo(string key) {
 
 void Config::setInfo(string key, string value) {
     infos[key] = value;
+}
+
+bool Config::hasTemplateDir() {
+    if(templateDir.string().length() < 1) {
+        return false;
+    }
+    return true;
 }
 
 

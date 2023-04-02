@@ -67,6 +67,9 @@ class Config {
         */
         void setTemplateDir(fs::path newdir);
 
+        /*! Checks if Config has a template directory loaded. */
+        bool hasTemplateDir();
+
         /*! Gets the info for a given template. Returns empty string if no such info exists. */
         string getInfo(string template_name);
 
