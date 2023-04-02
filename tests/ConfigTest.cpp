@@ -52,11 +52,52 @@ class ConfigTest {
             res = c.getInfo("cpp");
             QUNIT_IS_EQUAL(res, "someinfo2");
             res = c.getInfo("cpp2");
-            QUNIT_IS_EQUAL(res, "");
+            QUNIT_IS_EQUAL(res, "No info for cpp2.");
             res = c.getInfo("unknown");
-            QUNIT_IS_EQUAL(res, "");
+            QUNIT_IS_EQUAL(res, "No info for unknown.");
 
             remove(tmp_conf.c_str());
+        }
+
+        void set() {
+            fs::path testpath = fs::path(tmp_conf);
+            Config c = Config(testpath);
+
+            fs::create_directory(tmp_tdir);
+
+            c.setTemplateDir(tmp_tdir);
+
+            fs::path result = c.getTemplateDir();
+            QUNIT_IS_EQUAL(result.string(), fs::canonical(tmp_tdir).string());
+
+            fs::remove(tmp_tdir);
+            remove(tmp_conf.c_str());
+
+        }
+
+        void write() {
+            fs::path testpath = fs::path(tmp_conf);
+            Config c = Config(testpath);
+
+            c.setInfo("cpp", "cpp proj");
+            c.setInfo("y","ynot");
+            fs::create_directory(tmp_tdir);
+            c.setTemplateDir(tmp_tdir);
+            c.writeConfig();
+
+            Config c2 = Config(testpath);
+            c2.readConfig();
+            string res = c2.getInfo("cpp");
+            QUNIT_IS_EQUAL(res, "cpp proj");
+            res = c2.getInfo("y");
+            QUNIT_IS_EQUAL(res, "ynot");
+
+            fs::path td = c2.getTemplateDir();
+            QUNIT_IS_EQUAL(fs::canonical(td.string()), fs::canonical(tmp_tdir));
+
+            fs::remove(tmp_tdir);
+            fs::remove(tmp_conf);
+
         }
 
     public:
@@ -65,6 +106,8 @@ class ConfigTest {
         int run() {
             init();
             read();
+            set();
+            write();
             return qunit.errors();
         }
 };

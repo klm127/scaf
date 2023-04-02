@@ -1,6 +1,6 @@
 OBDIR = obj
 IFLAGS = -I src -I lib -I tests -g
-OBFLAGS = -c -Wall $(IFLAGS)
+OBFLAGS = -c -Wall -Wno-unknown-pragmas $(IFLAGS) 
 RM = del /Q /F
 
 

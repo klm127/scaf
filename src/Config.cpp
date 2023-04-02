@@ -11,6 +11,8 @@
 
 using json = nlohmann::json;
 
+#pragma region utility
+
 fs::path GetFullExePath() {
 
 #ifdef _WIN32
@@ -25,7 +27,9 @@ fs::path GetFullExePath() {
     return fs::path{ exe_path }.parent_path();
 }
 
+#pragma endregion utility
 
+#pragma region constructors 
 
 Config::Config() {
     fs::path c_path = GetFullExePath();
@@ -63,9 +67,45 @@ Config::Config(fs::path c_path) {
     infos = map<string, string>();
 }
 
+#pragma endregion constructors
+
+#pragma region getters_and_setters
+
+fs::path Config::getTemplateDir() {
+    return templateDir;
+}
+
+void Config::setTemplateDir(fs::path new_path) {
+    if(!fs::exists(new_path)) {
+        cout << "The path " << new_path << " doesn't exist!" << endl;
+    }
+    else if(!fs::is_directory(new_path)) {
+        cout << "Can't set template directory to a non-directory!" << endl;
+    } else {
+        templateDir = fs::canonical(new_path);
+    }
+}
+
+string Config::getInfo(string key) {
+    string result = infos[key];
+    if(result.length() == 0) {
+        result = "No info for " + key + ".";
+    }
+    return result;
+}
+
+void Config::setInfo(string key, string value) {
+    infos[key] = value;
+}
+
+
 fs::path Config::getPath() {
     return configPath;
 }
+
+#pragma endregion getters_and_setters
+
+#pragma region readers_and_writers
 
 void Config::readConfig() {
     json data;
@@ -109,11 +149,20 @@ void Config::readConfig() {
     }
 }
 
-fs::path Config::getTemplateDir() {
-    return templateDir;
+
+void Config::writeConfig() {
+    json write = json();
+    json infosjson = json();
+    write[dirKey] = templateDir.string();
+    for(const auto &[key, value] : infos) {
+        infosjson[key] = value;
+    }
+    write[infoKey] = infosjson;
+    ofstream file;
+    file.open(configPath, ios::out);
+    file << write.dump(4);
+    file.close();
 }
 
-string Config::getInfo(string key) {
-    return infos[key];
-}
+#pragma endregion readers_and_writers
 
