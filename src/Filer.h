@@ -19,11 +19,15 @@ namespace fs = std::filesystem;
     Particularly, Filer ignores `.git` folders when determining whether a directory is empty and when copying recursively.
 
     It also provides functions for getting information about the contents of a folder.
+
+    \brief Performs some filesystem operations and queries.
 */
 namespace Filer {
 
     /*!
         Provides data about a copy operation.
+
+        \brief Provides data about a recursive copy operation.
 
         Returned by Filer::copyRecursive.
     */
@@ -34,8 +38,6 @@ namespace Filer {
         int folderscopied;
         /*! Whether a '.git' folder was skipped. */
         bool gitskipped;
-        /*! The time it took. */
-        double time_taken;
     } copy_result;
     /*! 
         Recursively copies all files and folders in from to directory to.
@@ -47,7 +49,7 @@ namespace Filer {
         \param to The directory to copy to.
         \return The number of files copied.
     */
-    int copyRecursive(fs::path from, fs::path to);
+    copy_result copyRecursive(fs::path from, fs::path to);
 
     /*!
         Checks whether a given directory is empty. (Excluding .git folder.)

@@ -21,6 +21,8 @@ using namespace std;
     As Config reads the saved program data, it instances Templates. (It doesn't!)
 
     Template has not been removed because it is well-tested and may be useful in a future refactor.
+
+    \brief Holds information about a template. Not used!
 */
 class Template {
     private:

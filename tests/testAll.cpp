@@ -19,6 +19,8 @@
 
     Defaults to normal verbosity and all tests.
 
+    \brief Parses command line arguments to run all or one test.
+
 */
 int main(int argc, char ** argv) {
     filesystem::create_directory("tmp");

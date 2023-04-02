@@ -19,6 +19,7 @@ const string flr_tmp_fl = "./tmp/tmpl2/t.x";
 const string flr_tmp_fl2 = "./tmp/tmpl2/tt/t2.x";
 const string flr_tmp_odir = "./tmp/tout";
 
+/*! \brief Tests the Filer namespace. */
 class FilerTest {
     QUnit::UnitTest qunit;
 
@@ -50,8 +51,8 @@ class FilerTest {
             file.open(flr_tmp_fl2, ios::out);
             file.close();
 
-            int count = Filer::copyRecursive(flr_tmp_tdir, flr_tmp_odir);
-            QUNIT_IS_EQUAL(count, 2);
+            Filer::copy_result count = Filer::copyRecursive(flr_tmp_tdir, flr_tmp_odir);
+            QUNIT_IS_EQUAL(count.filescopied, 2);
 
             fs::remove_all(flr_tmp_tdir);
             

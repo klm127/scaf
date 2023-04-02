@@ -9,6 +9,7 @@
 #include <filesystem>
 
 #include "Config.h"
+#include "Filer.h"
 
 using namespace std;
 
@@ -18,8 +19,15 @@ void stringLower(string& s);
 /*! Looks for a 'y' or 'n'. */
 bool promptYN(bool default_yn);
 
+/*! Prints a copy result on 3 lines with correct pluralization.
+    \param copied The result of a recursive directory copy.
+*/
+void printCopyResult(Filer::copy_result & copied);
+
 /*!
     Scaf drives the program execution. It loads the config and parses the command line arguments into the correct commands. 
+
+    \brief Parses and executes the command line arguments.
 */
 class Scaf {
     public:

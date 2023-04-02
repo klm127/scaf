@@ -9,22 +9,28 @@
 #include <iostream>
 #include <bits/stdc++.h>
 
-int Filer::copyRecursive(fs::path from, fs::path to) {
-    int count = 0;
+Filer::copy_result Filer::copyRecursive(fs::path from, fs::path to) {
+    Filer::copy_result result {0,0,false};
     for(const auto& dir : fs::directory_iterator(from)) {
         if(dir.is_directory()) {
             if(dir.path().stem() != ".git") {
                 fs::path to_path = to / dir.path().stem();
                 fs::create_directory(to_path);
-                count += copyRecursive(dir, to_path);
+                result.folderscopied += 1;
+                Filer::copy_result inner = copyRecursive(dir.path(), to_path);
+                result.filescopied += inner.filescopied;
+                result.folderscopied += inner.folderscopied;
+                if(inner.gitskipped) result.gitskipped = true;
+            } else {
+                result.gitskipped = true;
             }
-        } else if(dir.is_regular_file()) {
+        } else {
             fs::path to_path = to / dir.path().filename().string();
             fs::copy_file(dir.path(), to_path);
-            count++;
+            result.filescopied += 1;
         }
     }
-    return count;
+    return result;
 }
 bool Filer::isEmpty(fs::path check) {
     bool empty = true;

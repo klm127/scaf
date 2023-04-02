@@ -36,6 +36,8 @@ fs::path GetFullExePath();
     When it is constructed, it looks for `scaf.config.json` in the process working directory. If it doesn't exist, it is created. If it is exists as a directory, a runtime error is thrown. 
 
     Otherwise, it parses that configuration file to load scaf's saved settings.
+
+    \brief loads scaf.conf.json from the process working directory.
 */
 class Config {
     private:

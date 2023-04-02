@@ -16,6 +16,7 @@ namespace fs = std::filesystem;
 const string tmp_conf = "./tmp/testconf.json";
 const string tmp_tdir = "./tmp/tmpl";
 
+/*! \brief Tests the Config class. */
 class ConfigTest {
     QUnit::UnitTest qunit;
 

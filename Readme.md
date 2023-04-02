@@ -4,6 +4,8 @@ Scaf is general purpose, command line, project initialization tool.
 
 Scaf is purpose-agnostic and can be used to start-up ("scaffold") any type of project that has a directory structure.
 
+It is a *universal project scaffolding tool*.
+
 Scaf works by maintaining directories of templates that the user supplies. When the user wants to scaffold a new project, they may use scaf to copy the contents from one of these directories into their current directory.
 
 

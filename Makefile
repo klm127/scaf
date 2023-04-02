@@ -43,7 +43,21 @@ clean:
 	-$(RM) bin\\scaf.exe
 	-$(RM) obj\\*.obj
 	-$(RM) lib\\*.gch
+	-$(RM) docs\\latex
+
+clean_docs:
+	-$(RM) reference.pdf
+	rmdir docs /s /q
 
 folders:
 	mkdir bin
 	mkdir obj
+
+docs/html/index.html: tests/*.cpp src/*.cpp src/*.h
+	doxygen
+
+docs/latex/refman.pdf: docs/html/index.html
+	cd docs/latex && make.bat
+
+reference.pdf: docs/latex/refman.pdf
+	copy ".\docs\latex\refman.pdf" ".\reference.pdf"

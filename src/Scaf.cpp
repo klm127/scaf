@@ -11,6 +11,8 @@
 #include "Scaf.h"
 #include "Filer.h"
 
+using namespace std;
+
 #pragma region utility
 
 void stringLower(string & s) {
@@ -20,7 +22,7 @@ void stringLower(string & s) {
 }
 
 bool promptYN(bool default_yn) {
-    cout << "y/n? ";
+    std::cout << "y/n? ";
     char c = (char) getchar(); 
     bool result = default_yn;
     if(c == 'y' || c == 'Y') {
@@ -35,6 +37,25 @@ bool promptYN(bool default_yn) {
         }
     }
     return result;
+}
+
+void printCopyResult(Filer::copy_result & copied) {
+
+    cout << "\nCopied " << copied.filescopied;
+    if(copied.filescopied == 1) { 
+        cout << " file.";
+    } else {
+        cout << " files.";
+    }
+    cout << "\nCopied " << copied.folderscopied;
+    if(copied.folderscopied == 1) {
+        cout << " folder.";
+    } else {
+        cout << " folders.";
+    }
+    if(copied.gitskipped) {
+        cout << "\nSkipped a .git folder.";
+    }
 }
 
 #pragma endregion utility
@@ -132,7 +153,7 @@ bool Scaf::Root(int index, vector<string>& args) {
             target = fs::current_path() / args[index];
         }
         index++;
-        if(index == (int) args.size()) {
+        if(index < (int) args.size()) {
             cout << "\nToo many parameters. Skipping extras.";
         }
     }
@@ -208,9 +229,9 @@ bool Scaf::Add(int index, vector<string>& args) {
                     result = false;
                 }
                 if(result) {
-                    int n_copied = Filer::copyRecursive(target, transfer_to);
+                    Filer::copy_result copied = Filer::copyRecursive(target, transfer_to);
                     // TODO: More detailed copy data; copyRecursive could return a struct. Can exceptions be thrown by copyRecursive? How should they be handled?
-                    cout << "\nCopied " << n_copied << " files.";
+                    printCopyResult(copied);
                 }
             }
         } else {
@@ -256,8 +277,22 @@ bool Scaf::Load(int index, vector<string>& args) {
                 target = args[index];
             }
             index++;
-            if(index >= (int) args.size()) {
+            if(index < (int) args.size()) {
                 cout << "\nToo many parameters. Skipping extras.";
+            }
+        }
+    }
+
+    if(!fs::exists(target)) {
+        cout << "\n" << target << " doesn't exist. Create directory? ";
+        result = promptYN(true);
+        if(result) {
+            try {
+                fs::create_directory(target);
+                cout << "\n" << target << " created.";
+            } catch(const fs::filesystem_error& ex) {
+                cout << "\n" << "Error creating directory! \n" << ex.what();
+                result = false;
             }
         }
     }
@@ -293,7 +328,8 @@ bool Scaf::Load(int index, vector<string>& args) {
                     }
                     if(canfill){
                         source_path = m[source_alias];
-                        Filer::copyRecursive(source_path, target);
+                        Filer::copy_result copied = Filer::copyRecursive(source_path, target);
+                        printCopyResult(copied);
                         result = true;
                     } else {
                         cout << "\nCan't load to full directory.";
@@ -357,7 +393,7 @@ bool Scaf::List(int index, vector<string>& args) {
     }
     
     if(result) {
-        cout << "\nListing available templates.\n\n";
+        cout << "\nListing available templates at root: " << config.getTemplateDir() << "\n\n";
         cout << right << setw(15) << "Template" << "   ";
         cout << left << setw(30) << "Info" << endl;
         cout << "  -------------   --------------------------------------" << endl;
@@ -594,8 +630,8 @@ bool Scaf::Rename(int index, vector<string>& args) {
                     }
                     if(result) {
                         try {
-                            int ncopied = Filer::copyRecursive(val, to);
-                            cout << "\nCopied " << ncopied << " files.";
+                            Filer::copy_result copied = Filer::copyRecursive(val, to);
+                            printCopyResult(copied);
                         } catch(const fs::filesystem_error& ex) {
                             cout << "\nError copying files! \n" << ex.what();
                             result = false;

@@ -12,6 +12,8 @@
 
 using namespace std;
 
+
+/*! \brief Tests the Template class. */
 class TemplateTest {
     QUnit::UnitTest qunit;
 
