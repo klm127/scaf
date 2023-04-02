@@ -1,13 +1,18 @@
+_Scaff, a universal project scaffolding tool_
+
 # What is Scaf
 
 Scaf is general purpose, command line, project initialization tool.
 
 Scaf is purpose-agnostic and can be used to start-up ("scaffold") any type of project that has a directory structure.
 
-It is a *universal project scaffolding tool*.
-
 Scaf works by maintaining directories of templates that the user supplies. When the user wants to scaffold a new project, they may use scaf to copy the contents from one of these directories into their current directory.
 
+# Links
+
+[YouTube Demo](https://www.youtube.com/watch?v=kLVdjXp3JyA)
+[Blog Post](https://quaffingcode.com/scaf)
+[Generated Documentation](http://www.quaffingcode.com/scaf/html/index.html)
 
 # Use Cases
 
@@ -35,6 +40,8 @@ The prompt:
 
 Scaf achieves this by automating the starting up of new digital projects of all kinds and eliminating boilerplate and repetition.
 
+For more detail about the implementation, see the [web documentation](http://www.quaffingcode.com/scaf/html/index.html) or the `reference.pdf` file in this directory.
+
 # Commands
 
 `scaf root { . | subdir }` Registers the root directory for template storage. Makes the current directory or provided subdirectory the root for scaf templates to be saved. This command needs to be used to pick a template directory before scaf's other commands will become functional.
@@ -54,6 +61,14 @@ Scaf achieves this by automating the starting up of new digital projects of all 
 `scaf rename <template> <newname>` Rename a given template. Info will also be moved over.
 
 `scaf help <command>` Get help about scaf.
+
+# Getting Scaf
+
+You can get scaf by building it from source, as described in the `Compiling, Installing` section below.
+
+You can also download the binary directly from the project releases.
+
+It is a 64-bit Windows binary. 
 
 # Compiling, Installing
 
@@ -125,10 +140,10 @@ scaf load cpp-basic new-proj           # load your template into new-proj
 
 `scaf.config.json` will be placed in the same directory where `scaf.exe` is located.
 
-# Dependencies
+# Dependencies and Credits
 
-`lib/QUnit.hpp` A lightweight C++ testing framework. [Project Homepage](https://qunit.sourceforge.net/)
-`lib/json.hpp` nlohmann/json's JSON parsing library. [Project Homepage](https://github.com/nlohmann/json)
+- `lib/QUnit.hpp` A lightweight C++ testing framework. [Project Homepage](https://qunit.sourceforge.net/)
+- `lib/json.hpp` nlohmann/json's JSON parsing library. [Project Homepage](https://github.com/nlohmann/json)
 
 To compile, you must be using a compiler that supports `-std=c++17`. Scaf uses [filesystem](https://en.cppreference.com/w/cpp/filesystem) for much of its operation.
 

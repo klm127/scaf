@@ -5,7 +5,7 @@
     \date April 2023
 
     \mainpage scaf
-    \version 1.0.0
+    \version 1.0.1
 
     Created by Karl Miller for the Spring 2023 Code Jam at PennWest California. 
 

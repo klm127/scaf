@@ -393,12 +393,22 @@ bool Scaf::List(int index, vector<string>& args) {
     }
     
     if(result) {
-        cout << "\nListing available templates at root: " << config.getTemplateDir() << "\n\n";
-        cout << right << setw(15) << "Template" << "   ";
-        cout << left << setw(30) << "Info" << endl;
-        cout << "  -------------   --------------------------------------" << endl;
+        size_t longest = 15;
         for(auto dir : dirnames) {
-            cout << right << setw(15) << dir << "   ";
+            if(dir.size() > longest) {
+                longest = (int) dir.size();
+            }
+        }
+        cout << "\nListing available templates at root: " << config.getTemplateDir() << "\n\n";
+        cout << right << setw(longest) << "Template" << "   ";
+        cout << left << setw(30) << "Info" << endl;
+        cout << "  ";
+        for(size_t i = 0; i < longest-2; i++) {
+            cout << "-";
+        }
+        cout << "   --------------------------------------" << endl;
+        for(auto dir : dirnames) {
+            cout << right << setw(longest) << dir << "   ";
             cout << left << setw(30) << config.getInfo(dir) << endl;
         }
     } else {
