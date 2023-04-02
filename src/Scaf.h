@@ -41,6 +41,9 @@ class Scaf {
         /*! Processes the add command.*/
         bool Add(int index, vector<string>& args);
 
+        /*! Processes the load command. */
+        bool Load(int index, vector<string>& args);
+
         /*! Prints overall program help. Occurs if no arguments are passed, 'help', or '?' is passed. */
         void printHelp();
 

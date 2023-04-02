@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <map>
 
 #include "Scaf.h"
 #include "Filer.h"
@@ -66,6 +67,7 @@ bool Scaf::Start(int argc, char ** argv) {
             result = Add(1, arguments);
 
         } else if(arguments[0] == "load") {
+            result = Load(1, arguments);
 
         } else if(arguments[0] == "info") {
 
@@ -222,10 +224,95 @@ bool Scaf::Add(int index, vector<string>& args) {
     return result;
 }
 
+bool Scaf::Load(int index, vector<string>& args) {
+    bool result;
+    fs::path target;
+    string source_alias;
+    fs::path source_path;
+
+    // Parse the arguments
+    if(index == (int) args.size()) {
+        result = false;
+        cout << "\nYou must supply a template to the load command.";
+    } else {
+        source_alias = args[index];
+        index++;
+        if(index == (int) args.size()) {
+            target = fs::current_path();
+        } else {
+            if(args[index] == ".") {
+                target = fs::current_path();
+            } else {
+                target = args[index];
+            }
+            index++;
+            if(index >= (int) args.size()) {
+                cout << "\nToo many parameters. Skipping extras.";
+            }
+        }
+    }
+
+    // Execute the command
+    if(fs::is_directory(target)) {
+        if(!config.hasTemplateDir()) {
+            result = false;
+            cout << "\nYou must first set a template directory with scaf root.";
+        } else {
+            map<string, fs::path> m = map<string, fs::path>();
+        
+            result = Filer::fillMapWithDirectories(config.getTemplateDir(), m);
+            if(!result) {
+                result = false;
+                cout << "\nCouldn't load the template directory! Try setting again with scaf root.";
+            } else {
+                result = m[source_alias].string().size() > 0;
+                
+                if(!result) {
+                    cout << "\nCouldn't locate the template " << source_alias << ".";
+                } else {
+                    
+                    bool canfill = true;
+                    if(!Filer::isEmpty(target)) {
+                        cout << "\nTarget " << target << " is not empty.";
+                        cout << "\nClear directory? ";
+                        canfill = promptYN(false);
+                        if(canfill) {
+                            canfill = Filer::clearDir(target);
+                            cout << "\nCleared directory.";
+                        }
+                    }
+                    if(canfill){
+                        source_path = m[source_alias];
+                        Filer::copyRecursive(source_path, target);
+                        result = true;
+                    } else {
+                        cout << "\nCan't load to full directory.";
+                        result = false;
+                    }
+                }
+                
+            }
+        }
+    } else {
+        cout << "\n" << target << " is not a directory!"; 
+        result = false;
+    }
+
+    // Print the result.
+
+    if(result) {
+        cout << "\nLoaded template " << source_alias << " to " << target;
+    } else {
+        cout << "\nFailed to execute command load.";
+    }
+    
+    return result;
+}
+
 #pragma endregion parse
 
 
-#pragma region endpoint
+#pragma region print
 
 void Scaf::printHelp() {
     cout <<   "\n                            ----------------- ";
@@ -301,4 +388,4 @@ void Scaf::printHelpList() {
      << "\n\tLists all available templates.\n";
 }
 
-#pragma endregion endpoint
+#pragma endregion print

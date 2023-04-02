@@ -18,6 +18,8 @@ Scaf was made by Karl Miller for the 2023 PennWest California Spring Code Jam.
 
 `scaf load <template> { subdirectory }` Scaffold one of your templates into the currect directory or the subdirectory if supplied.
 
+`scaf list` List the available templates.
+
 `scaf info <template>` Get a description of the given template.
 
 `scaf set <template> <info>` Set the information for a template that can be referenced later.
@@ -26,7 +28,6 @@ Scaf was made by Karl Miller for the 2023 PennWest California Spring Code Jam.
 
 `scaf rename <template> <newname>` Rename a given template. Info will also be moved over.
 
-`scaf list` List the available templates.
 
 `scaf help <command>` Get help about scaf.
 

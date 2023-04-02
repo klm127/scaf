@@ -34,3 +34,34 @@ bool Filer::isEmpty(fs::path check) {
     }
     return empty;
 }
+
+bool Filer::fillMapWithDirectories(const fs::path & p, map<string, fs::path> & m) {
+    bool result = true;
+    if(!fs::exists(p)) {
+        result = false;
+    } else {
+        for(const auto& dir : fs::directory_iterator(p)) {
+            if(dir.is_directory()) {
+                string stem = dir.path().stem().string();
+                if(stem != ".git") {
+                    m[stem] = dir;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+bool Filer::clearDir(fs::path p) {
+    for(const auto& dir : fs::directory_iterator(p)) {
+        if(dir.is_directory()) {
+            string stem = dir.path().stem().string();
+            if(stem != ".git") {
+                fs::remove_all(dir.path());
+            }
+        } else {
+            fs::remove(dir.path());
+        }
+    }
+    return true;
+}

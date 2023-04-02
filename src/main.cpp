@@ -13,6 +13,8 @@ int main(int argc, char ** argv)
     // }
     Scaf scaf = Scaf();
     scaf.Start(argc, argv);
+
+    cout << endl;
     return 2023;
 
 }
