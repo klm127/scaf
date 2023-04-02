@@ -68,7 +68,8 @@ bool Scaf::Start(int argc, char ** argv) {
 
         } else if(arguments[0] == "load") {
             result = Load(1, arguments);
-
+        } else if(arguments[0] == "list") {
+            result = List(1, arguments);
         } else if(arguments[0] == "info") {
 
         } else if(arguments[0] == "set") {
@@ -78,6 +79,11 @@ bool Scaf::Start(int argc, char ** argv) {
         } else if(arguments[0] == "rename") {
 
         }
+    }
+    if(!result) {
+        cout << "\nscaf finished with errors.";
+    } else {
+        cout << "\nscaf finished.";
     }
     return result;
 }
@@ -309,6 +315,60 @@ bool Scaf::Load(int index, vector<string>& args) {
     return result;
 }
 
+bool Scaf::List(int index, vector<string>& args) {
+    bool result;
+    string filter = "";
+    vector<string> dirnames = vector<string>();
+    if(index < (int) args.size()) {
+        filter = args[index];
+        index++;
+        if(index < (int) args.size()) {
+            cout << "\nToo many parameters. Skipping extras.";
+        }
+    }
+
+    if(!config.hasTemplateDir()) {
+        result = false;
+        cout << "\nYou must first set a template directory with scaf root.";
+    } else {
+        if(filter.size() > 0) {
+            cout << "\nFiltering templates starting with '" << filter << "'.";
+            Filer::fillVectorWithDirectories(config.getTemplateDir(), dirnames, filter);
+        } else {
+            Filer::fillVectorWithDirectories(config.getTemplateDir(), dirnames);
+        }
+        if(dirnames.size() > 0) {
+            result = true;
+        } else {
+            if(filter.size() > 0) {
+                cout << "\nThere are no directories in root " << config.getTemplateDir() << " matching filter "
+                << filter << ".";
+            } else {
+                cout << "\nThere are no directories in root " << config.getTemplateDir() << ".";
+                cout << "\nAdd at least one template first with scaf add.";
+                result = false;
+
+            }
+        }
+    }
+    
+    if(result) {
+        cout << "\nListing available templates.\n\n";
+        cout << right << setw(15) << "Template" << "   ";
+        cout << left << setw(30) << "Info" << endl;
+        cout << "  -------------   --------------------------------------" << endl;
+        for(auto dir : dirnames) {
+            cout << right << setw(15) << dir << "   ";
+            cout << left << setw(30) << config.getInfo(dir) << endl;
+        }
+        cout << endl;
+    } else {
+        cout << "\nFailed to execute command list.";
+    }
+    return result;
+
+}
+
 #pragma endregion parse
 
 
@@ -333,7 +393,6 @@ void Scaf::printHelp() {
 
     cout << "\n Use `scaf help <command>` for more information about a specific command.\n";
 }
-
 void Scaf::printHelpRoot() {
     cout << "\n Scaf: Help for the root command:\n"
      << "\n\tSyntax: scaf root { . | subdir}\n"
@@ -384,8 +443,9 @@ void Scaf::printHelpRename() {
 }
 void Scaf::printHelpList() {
     cout << "\n Scaf: Help for the list command:\n"
-     << "\n\tSyntax: scaf list \n"
-     << "\n\tLists all available templates.\n";
+     << "\n\tSyntax: scaf list {filter}\n"
+     << "\n\tLists all available templates."
+     << "\n\tIf filter is provided, only lists those that start with filter.\n";
 }
 
 #pragma endregion print

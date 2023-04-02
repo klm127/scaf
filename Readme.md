@@ -18,7 +18,7 @@ Scaf was made by Karl Miller for the 2023 PennWest California Spring Code Jam.
 
 `scaf load <template> { subdirectory }` Scaffold one of your templates into the currect directory or the subdirectory if supplied.
 
-`scaf list` List the available templates.
+`scaf list {filter}` List the available templates. If a filter is provided, it will only list templates with alias matching prefix filter.
 
 `scaf info <template>` Get a description of the given template.
 

@@ -1,5 +1,6 @@
 #include "Filer.h"
 #include <iostream>
+#include <bits/stdc++.h>
 
 int Filer::copyRecursive(fs::path from, fs::path to) {
     int count = 0;
@@ -52,16 +53,62 @@ bool Filer::fillMapWithDirectories(const fs::path & p, map<string, fs::path> & m
     return result;
 }
 
-bool Filer::clearDir(fs::path p) {
-    for(const auto& dir : fs::directory_iterator(p)) {
-        if(dir.is_directory()) {
-            string stem = dir.path().stem().string();
-            if(stem != ".git") {
-                fs::remove_all(dir.path());
+bool Filer::fillVectorWithDirectories(const fs::path & p, vector<string> & v) {
+    bool result;
+    if(!fs::exists(p) || !(fs::is_directory(p))) {
+        result = false;
+    } else {
+        result = true;
+        for(const auto& dir : fs::directory_iterator(p)) {
+            if(dir.is_directory()) {
+                string stem = dir.path().stem().string();
+                if(stem != ".git") {
+                    v.push_back(stem);
+                }
             }
-        } else {
-            fs::remove(dir.path());
         }
     }
-    return true;
+    sort(v.begin(), v.end());
+    return result;
+}
+
+bool Filer::fillVectorWithDirectories(const fs::path &p, vector<string>& v, string &filter_prefix) {
+    bool result;
+    if(!fs::exists(p) || !(fs::is_directory(p))) {
+        result = false;
+    } else {
+        result = true;
+        for(const auto& dir : fs::directory_iterator(p)) {
+            if(dir.is_directory()) {
+                string stem = dir.path().stem().string();
+                if(stem != ".git") {
+                    if(stem.rfind(filter_prefix, 0) == 0) {
+                        v.push_back(stem);
+                    }
+                }
+            }
+        }
+    }
+    sort(v.begin(), v.end());
+    return result;    
+}
+
+bool Filer::clearDir(fs::path p) {
+    bool result;
+    if(!fs::exists(p) || !(fs::is_directory(p))) {
+        result = false;
+    } else {
+        result = true;
+        for(const auto& dir : fs::directory_iterator(p)) {
+            if(dir.is_directory()) {
+                string stem = dir.path().stem().string();
+                if(stem != ".git") {
+                    fs::remove_all(dir.path());
+                }
+            } else {
+                fs::remove(dir.path());
+            }
+        }
+    }
+    return result;
 }
