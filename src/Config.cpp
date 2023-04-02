@@ -92,9 +92,6 @@ bool Config::setTemplateDir(fs::path new_path) {
 
 string Config::getInfo(string key) {
     string result = infos[key];
-    if(result.length() == 0) {
-        result = "No info for " + key + ".";
-    }
     return result;
 }
 
@@ -173,7 +170,7 @@ void Config::writeConfig() {
     file.open(configPath, ios::out);
     file << write.dump(4);
     file.close();
-    cout << "\nUpdated config.\n";
+    cout << "\nUpdated config.";
 }
 
 #pragma endregion readers_and_writers

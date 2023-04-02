@@ -14,7 +14,7 @@ void stringLower(string & s) {
 }
 
 bool promptYN(bool default_yn) {
-    cout << "y/n?";
+    cout << "y/n? ";
     char c = (char) getchar(); 
     bool result = default_yn;
     if(c == 'y' || c == 'Y') {
@@ -65,25 +65,25 @@ bool Scaf::Start(int argc, char ** argv) {
             result = Root(1, arguments);
         } else if(arguments[0] == "add") {
             result = Add(1, arguments);
-
         } else if(arguments[0] == "load") {
             result = Load(1, arguments);
         } else if(arguments[0] == "list") {
             result = List(1, arguments);
         } else if(arguments[0] == "info") {
-
+            result = Info(1, arguments);
         } else if(arguments[0] == "set") {
-
+            result = Set(1, arguments);
         } else if(arguments[0] == "remove") {
-
+            result = Remove(1, arguments);
         } else if(arguments[0] == "rename") {
-
+            result = Rename(1, arguments);
+        } else {
+            result = false;
+            cout << "\n" << arguments[0] << " is not a recognized command.";
         }
     }
     if(!result) {
-        cout << "\nscaf finished with errors.";
-    } else {
-        cout << "\nscaf finished.";
+        cout << "\n scaf finished with errors.";
     }
     return result;
 }
@@ -134,7 +134,7 @@ bool Scaf::Root(int index, vector<string>& args) {
     }
     bool result = config.setTemplateDir(target);
     if(result) {
-        cout << "\nSet new template directory to " << target << ".";
+        cout << "\nSet new root template directory to " << target << ".";
         config.writeConfig();
     } else {
         cout << "\nFailed to execute command root.";
@@ -185,7 +185,7 @@ bool Scaf::Add(int index, vector<string>& args) {
             if(fs::exists(transfer_to)) {
                 cout << "\nA template with that alias already exists.";
                 cout << "\nOverwrite? ";
-                bool overwrite = promptYN(true);
+                bool overwrite = promptYN(false);
                 if(overwrite) {
                     cout << "\nOverwriting " << alias << ".";
                     fs::remove_all(transfer_to);
@@ -222,7 +222,7 @@ bool Scaf::Add(int index, vector<string>& args) {
     if(!result) {
         cout << "\nFailed to execute command add.";
     } else {
-        cout << "\nAdded " << alias << " to your templates.";
+        cout << "\nAdded '" << alias << "' to your templates.";
         config.setInfo(alias, infotxt);
         config.writeConfig();
     }
@@ -361,7 +361,6 @@ bool Scaf::List(int index, vector<string>& args) {
             cout << right << setw(15) << dir << "   ";
             cout << left << setw(30) << config.getInfo(dir) << endl;
         }
-        cout << endl;
     } else {
         cout << "\nFailed to execute command list.";
     }
@@ -369,6 +368,262 @@ bool Scaf::List(int index, vector<string>& args) {
 
 }
 
+bool Scaf::Info(int index, vector<string>& args) {
+    bool result = true;
+    string target;
+
+    // parse arguments
+    if(index == (int) args.size()) {
+        cout << "\nNo template parameter supplied.";
+        result = false;
+    } else {
+        target = args[index];
+        index++;
+        if(index < (int) args.size()) {
+            cout << "\nToo many parameters. Skipping extras.";
+        }
+    }
+
+    if(result) {
+        if(!config.hasTemplateDir()) {
+            cout << "\nNo template directory set in config. Use scaf root to set your root directory.";
+            result = false;
+        } else {
+            map<string, fs::path> m = map<string, fs::path>();
+            result = Filer::fillMapWithDirectories(config.getTemplateDir(), m);
+            if(!result) {
+                cout << "\nRoot is an invalid directory. Try setting it again.";
+            } else {
+                if(m[target].string().size() < 1) {
+                    cout << "\n" << target << " does not refer to a valid template in root!";
+                    result = false;
+                } else {
+                    cout << "\nInfo for template '" << target << "':\t";
+                    string info = config.getInfo(target);
+                    if(info.size() < 1) {
+                        cout << "No info for " + target + ".";
+                    } else {
+                        cout << info;
+                    }
+                }
+            }
+
+        }
+    }
+    
+    if(!result) {
+        cout << "\nFailed to execute command info.";
+    }
+    return result;
+}
+
+bool Scaf::Set(int index, vector<string>& args) {
+    bool result = true;
+    string target;
+    string newinfo;
+    if(index == (int) args.size()) {
+        cout << "\nNo template parameter provided!";
+        result = false;
+    } else {
+        target = args[index];
+        index ++;
+        if(index == (int) args.size()) {
+            newinfo = "";
+        } else {
+            newinfo = args[index];
+            index++;
+            if(index < (int) args.size()) {
+                cout << "\nToo many parameters. Skipping extras.";
+            }
+        }
+    }
+
+    if(result) {
+        if(!config.hasTemplateDir()) {
+            cout << "\nNo root directory set. Use scaf root to set a root directory for templates.";
+            cout << "\nInfo will be available once root is set and template with that name is added. ";
+        } else {
+            map<string, fs::path> m = map<string, fs::path>();
+            if(!Filer::fillMapWithDirectories(config.getTemplateDir(), m)) {
+                cout << "\nThere was a problem loading the root directory. Use scaf root to set a root directory for templates.";
+                cout << "\nInfo will be available once root is set and template with that name is added. ";
+            } else {
+                if(m[target].string().size() < 1) {
+                    cout << "\nCouldn't locate template " << target << ".";
+                    cout << "\nInfo will be available once a template with that name is added.";
+                } 
+            }
+        }
+    }
+
+    if(result) {
+        cout << "\nSaving info for " << target << ".";
+        config.setInfo(target, newinfo);
+        cout << "\nExecuted command set.";
+        config.writeConfig();
+    } else {
+        cout << "\nFailed to execute command set.";
+    }
+    return result;
+}
+
+bool Scaf::Remove(int index, vector<string>& args) {
+    bool result = true;
+    string target; 
+
+    // parse
+    if(index == (int) args.size()) {
+        cout << "\nNo template parameter provided!";
+        result = false;
+    } else {
+        target = args[index];
+        index++;
+        if(index < (int) args.size()) {
+            cout << "\nToo many parameters. Skipping extras.";
+        }
+    }
+
+    if(result) {
+        if(!config.hasTemplateDir()) {
+            cout << "\nNo root directory set. Use scaf root to set a root directory for templates.";
+            result = false;
+        } else {
+            map<string, fs::path> m = map<string, fs::path>();
+            if(!Filer::fillMapWithDirectories(config.getTemplateDir(), m)) {
+                cout << "\nThere was a problem loading the root directory. Use scaf root to set a root directory for templates.";
+                result = false;
+            } else {
+                if(m[target].string().size() < 1) {
+                    cout << "\nCouldn't find template " << target << ".";
+                    result = false;
+                } else {
+                    fs::path p = m[target];
+                    try {
+                        fs::remove_all(p);
+                        cout << "\nRemoved " << p;
+                        config.setInfo(target, "");
+                        cout << "\nCleared info for " << target << ".";
+                    } catch(const fs::filesystem_error& ex) {
+                        cout << "\nFilesystem error when trying to remove " << p << "!";
+                        cout << ex.what();
+                        result = false;
+                    }
+                }
+            }
+        }
+    }
+
+    if(!result) {
+        cout << "\nFailed to execute command remove.";
+    } else {
+        cout << "\nExecuted command remove.";
+        config.writeConfig();
+    }
+    return result;
+}
+
+bool Scaf::Rename(int index, vector<string>& args) {
+    bool result = true;
+    string target;
+    string new_name;
+
+    if(index == (int) args.size()) {
+        cout << "\nRemove command requires parameters!";
+        result = false;
+    } else {
+        target = args[index];
+        index++;
+        if(index == (int) args.size()) {
+            cout << "\nRemove command requires new name parameter!";
+            result = false; 
+        } else {
+            new_name = args[index];
+            index++;
+            if(index < (int) args.size()) {
+                cout << "\nToo many parameters. Skipping extras.";
+            }
+
+        }
+    }
+
+    if(target == new_name) {
+        cout << "\n" << target << " already has the name " << new_name << "!";
+        result = false;
+    }
+
+    if(result) {
+        if(!config.hasTemplateDir()) {
+            cout << "\nNo root directory set. Use scaf root to set a root directory for templates.";
+            result = false;
+        } else {
+            map<string, fs::path> m = map<string, fs::path>();
+            if(!Filer::fillMapWithDirectories(config.getTemplateDir(), m)) {
+                cout << "\nThere was a problem loading the root directory. Use scaf root to set a root directory for templates.";
+                result = false;
+            } else {
+                fs::path val = m[target];
+                if(val.string().size() < 1) {
+                    cout << "\nNo template found with name '" << target << "'!";
+                    result = false;
+                } else {
+                    fs::path to = config.getTemplateDir() / new_name;
+                    if(fs::exists(to)) {
+                        cout << "\nA template with name '" << to << "' already exists!\nOverwrite? ";
+                        result = promptYN(false);
+                        if(result) {
+                            try {
+                                fs::remove_all(to);
+                                cout << "\nRemoved " << to;
+                            } catch(const fs::filesystem_error& ex) {
+                                cout << "\nError while removing " << to << "!\n" << ex.what();
+                                result = false;
+                            }
+                        }
+                    }
+                    if(result) {
+                        try {
+                            fs::create_directory(to);
+                        } catch(const fs::filesystem_error& ex) {
+                            cout << "\nError while creating " << to << "!\n" << ex.what();
+                            result = false;
+                        }
+                    }
+                    if(result) {
+                        try {
+                            int ncopied = Filer::copyRecursive(val, to);
+                            cout << "\nCopied " << ncopied << " files.";
+                        } catch(const fs::filesystem_error& ex) {
+                            cout << "\nError copying files! \n" << ex.what();
+                            result = false;
+                        }
+                    }
+                    if(result) {
+                        try {
+                            fs::remove_all(val);
+                            cout << "\nRemoved " << val << ".";
+                        } catch(const fs::filesystem_error& ex) {
+                            cout << "\nError removing " << val << "!\n" << ex.what();
+                            result = false;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    if(result) {
+        cout << "\nExecuted command rename '" << target << "' to '" << new_name << "'.";
+        config.setInfo(new_name, config.getInfo(target));
+        config.setInfo(target, "");
+        config.writeConfig();
+
+    } else {
+        cout << "\nFailed to execute command remove.";
+    }
+
+    return result;
+}
 #pragma endregion parse
 
 
@@ -384,7 +639,7 @@ void Scaf::printHelp() {
     cout <<   "\n When you want to create a project using one of these templates, scaf will copy the contents";
     cout <<   "\n of the template into the folder you want to scaffold.";
 
-    cout << "\n\n     Commands:  root, add, info, set, remove, help, load\n";
+    cout << "\n\n     Commands:  root, add, load, list, info, set, remove, rename\n";
 
     if(!config.hasTemplateDir()) {
         cout << "\n Warning: You do not currently have a template directory loaded.";

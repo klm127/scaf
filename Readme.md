@@ -12,7 +12,7 @@ Scaf was made by Karl Miller for the 2023 PennWest California Spring Code Jam.
 
 # Commands
 
-`scaf root { . | subdir }` Makes the current directory or provided subdirectory the root for scaf templates to be saved. This command needs to be used to pick a template directory before scaf will become functional.
+`scaf root { . | subdir }` Makes the current directory or provided subdirectory the root for scaf templates to be saved. This command needs to be used to pick a template directory before scaf's other commands will become functional.
 
 `scaf add { { . | subdir} { alias { infotxt } }}` Create a scaf template from the current directory or subdirectory, and optionally change the name for templating (alias) and add info text. 
 

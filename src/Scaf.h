@@ -47,6 +47,18 @@ class Scaf {
         /*! Processes the list command. */
         bool List(int index, vector<string>& args);
 
+        /*! Processes the info command. */
+        bool Info(int index, vector<string>& args);
+
+        /*! Processes the set command. */
+        bool Set(int index, vector<string>& args);
+
+        /*! Processes the remove command. */
+        bool Remove(int index, vector<string>& args);
+
+        /*! Processes the rename command. */
+        bool Rename(int index, vector<string>& args);
+
         /*! Prints overall program help. Occurs if no arguments are passed, 'help', or '?' is passed. */
         void printHelp();
 
