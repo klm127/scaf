@@ -10,6 +10,9 @@ using namespace std;
 /*! Converts a string to all lower-case in place.*/
 void stringLower(string& s);
 
+/*! Looks for a 'y' or 'n'. */
+bool promptYN(bool default_yn);
+
 /*!
     Scaf drives the program execution. It loads the config and parses the command line arguments into the correct commands. 
 */
@@ -32,10 +35,11 @@ class Scaf {
         /*! Parses a help command. */
         bool Help(int index, vector<string>& args);
 
-        /*! Processes the Root command. */
+        /*! Processes the root command. */
         bool Root(int index, vector<string>& args);
 
-
+        /*! Processes the add command.*/
+        bool Add(int index, vector<string>& args);
 
         /*! Prints overall program help. Occurs if no arguments are passed, 'help', or '?' is passed. */
         void printHelp();

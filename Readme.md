@@ -1,4 +1,4 @@
-# Scaf
+# What is Scaf
 
 Scaf is general purpose, command line, project initialization tool.
 
@@ -6,11 +6,15 @@ Scaf is purpose-agnostic and can be used to start-up ("scaffold") any type of pr
 
 Scaf works by maintaining directories of templates that the user supplies. When the user wants to scaffold a new project, they may use scaf to copy the contents from one of these directories into their current directory.
 
+# About the Author
+
+Scaf was made by Karl Miller for the 2023 PennWest California Spring Code Jam. 
+
 # Commands
 
-`scaf root { . | path }` Makes the current directory or _path_ the root for scaf templates to be saved.
+`scaf root { . | subdir }` Makes the current directory or provided subdirectory the root for scaf templates to be saved. This command needs to be used to pick a template directory before scaf will become functional.
 
-`scaf add { { . | subdir} { alias { infotxt } }}` Create a scaf template from the current directory or subdirectory. If the current directory is used, and no alias is provided, you will be prompted for a name for your template. If a subdirectory, the subdirectory name will be used. `.git` folders will be ignored.
+`scaf add { { . | subdir} { alias { infotxt } }}` Create a scaf template from the current directory or subdirectory, and optionally change the name for templating (alias) and add info text. 
 
 `scaf load <template> { subdirectory }` Scaffold one of your templates into the currect directory or the subdirectory if supplied.
 
@@ -24,7 +28,7 @@ Scaf works by maintaining directories of templates that the user supplies. When 
 
 `scaf list` List the available templates.
 
-`scaf help` Get help about scaf.
+`scaf help <command>` Get help about scaf.
 
 # Compiling, Running
 
@@ -42,8 +46,8 @@ Add the `bin` folder to your system path to access scaf from anywhere on your co
 
 ```json
 {
-    templateDir: "C:\\MyScafs",
-    infos: {
+    "templateDir": "C:\\MyScafs",
+    "infos": {
         "js1": "A simple node JS project I set up.",
         "cpp": "c++ with a basic makefile and unit testing framework.",
         "js2": "A webpacked JS project.",
@@ -52,8 +56,9 @@ Add the `bin` folder to your system path to access scaf from anywhere on your co
     }
 
 }
-
 ```
+
+`scaf.config.json` will be placed in the same directory where `scaf.exe` is located.
 
 # Dependencies
 

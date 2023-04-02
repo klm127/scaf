@@ -64,8 +64,9 @@ class Config {
             If the directory is relative, it will be converted to absolute. 
 
             \param newdir The new template directory. 
+            \returns true if directory could be set. false otherwise.
         */
-        void setTemplateDir(fs::path newdir);
+        bool setTemplateDir(fs::path newdir);
 
         /*! Checks if Config has a template directory loaded. */
         bool hasTemplateDir();

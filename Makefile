@@ -4,8 +4,8 @@ OBFLAGS = -Wall -Wno-unknown-pragmas $(IFLAGS) -std=c++17 -c
 RM = del /Q /F
 
 
-bin/scaf.exe: obj/Config.obj obj/Template.obj obj/Scaf.obj lib/json.hpp.gch
-	g++ $(IFLAGS) $(OBDIR)/Config.obj $(OBDIR)/Template.obj $(OBDIR)/Scaf.obj src/main.cpp -o bin/scaf
+bin/scaf.exe: $(OBDIR)/Config.obj $(OBDIR)/Template.obj $(OBDIR)/Scaf.obj $(OBDIR)/Filer.obj lib/json.hpp.gch
+	g++ $(IFLAGS) $(OBDIR)/Config.obj $(OBDIR)/Template.obj $(OBDIR)/Scaf.obj $(OBDIR)/Filer.obj src/main.cpp -o bin/scaf
 
 obj/Config.obj: src/Config.cpp
 	g++ $(OBFLAGS) -o $(OBDIR)/Config.obj src/Config.cpp

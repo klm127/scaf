@@ -8,6 +8,9 @@ namespace fs = std::filesystem;
 
 int main(int argc, char ** argv)
 {
+    // for(int i = 0; i < argc; i++) {
+    //     cout << "\nArg[" << i << "] = " << argv[i];
+    // }
     Scaf scaf = Scaf();
     scaf.Start(argc, argv);
     return 2023;

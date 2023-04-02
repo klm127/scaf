@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Scaf.h"
+#include "Filer.h"
 
 #pragma region utility
 
@@ -11,16 +12,37 @@ void stringLower(string & s) {
     }
 }
 
+bool promptYN(bool default_yn) {
+    cout << "y/n?";
+    char c = (char) getchar(); 
+    bool result = default_yn;
+    if(c == 'y' || c == 'Y') {
+        result = true;
+    } else if(c == 'n' || c == 'N') {
+        result = false;
+    } else {
+        if(default_yn == true) {
+            cout << "\nDefaulting to 'y'.";
+        } else {
+            cout << "\nDefaulting to 'n'.";
+        }
+    }
+    return result;
+}
+
+
 #pragma endregion utility
 
 #pragma region constructors
 
 Scaf::Scaf() {
     config = Config();
+    config.readConfig();
 }
 
 Scaf::Scaf(filesystem::path config_path) {
     config = Config(config_path);
+    config.readConfig();
 }
 
 
@@ -36,11 +58,12 @@ bool Scaf::Start(int argc, char ** argv) {
     } else {
         vector<string> arguments(argv + 1, argv+argc);
         stringLower(arguments[0]);
-        if(arguments[0] == "help" || arguments[1] == "?") {
+        if(arguments[0] == "help" || arguments[0] == "?") {
             result = Help(1, arguments);
         } else if(arguments[0] == "root") {
-
+            result = Root(1, arguments);
         } else if(arguments[0] == "add") {
+            result = Add(1, arguments);
 
         } else if(arguments[0] == "load") {
 
@@ -86,7 +109,117 @@ bool Scaf::Help(int index, vector<string>& args) {
 }
 
 bool Scaf::Root(int index, vector<string>& args) {
-    return true;
+    fs::path target;
+    if(index == (int) args.size()) {
+        target = fs::current_path();
+    } else {
+        // stripQuotes(args[index]);
+        if(args[index] == ".") {
+            target = fs::current_path();
+        } else {
+            target = fs::current_path() / args[index];
+        }
+        index++;
+        if(index == (int) args.size()) {
+            cout << "\nToo many parameters. Skipping extras.";
+        }
+    }
+    bool result = config.setTemplateDir(target);
+    if(result) {
+        cout << "\nSet new template directory to " << target << ".";
+        config.writeConfig();
+    } else {
+        cout << "\nFailed to execute command root.";
+    }
+    return result;
+}
+
+bool Scaf::Add(int index, vector<string>& args) {
+    fs::path target;
+    fs::path transfer_to;
+    string alias;
+    string infotxt = "";
+    bool result = true;
+
+    // Parse the arguments.
+    if(index == (int) args.size()) {
+        target = fs::current_path();
+        alias = target.stem().string();
+    } else {
+        if(args[index] == ".") {
+            target = fs::current_path();
+            alias = target.stem().string();
+        } else {
+            // stripQuotes(args[index]);
+            target = fs::current_path() / args[index];
+            alias = args[index];
+        }
+        index++;
+        if(index < (int) args.size()) {
+            // stripQuotes(args[index]);
+            stringLower(args[index]);
+            alias = args[index];
+            index++;
+            if(index < (int) args.size()) {
+                infotxt = args[index];
+                if(index == (int) args.size()) {
+                    cout << "\nToo many parameters. Skipping extras.";
+                }
+            }
+        }
+    }
+
+    // Execute the command. 
+    if(config.hasTemplateDir()) {
+        if(fs::is_directory(target)) {
+            transfer_to = config.getTemplateDir() / alias;
+            bool ok_to_transf = true;
+            if(fs::exists(transfer_to)) {
+                cout << "\nA template with that alias already exists.";
+                cout << "\nOverwrite? ";
+                bool overwrite = promptYN(true);
+                if(overwrite) {
+                    cout << "\nOverwriting " << alias << ".";
+                    fs::remove_all(transfer_to);
+                    ok_to_transf = true; 
+                } else {
+                    cout << "\nCanceling execution of add command.";
+                    ok_to_transf = false;
+                    result = false;
+                }
+            }
+            if(ok_to_transf) {
+                try {
+                    fs::create_directory(transfer_to);
+                } catch(const fs::filesystem_error& ex) {
+                    cout << "\nFailed to create directory " << transfer_to;
+                    result = false;
+                }
+                if(result) {
+                    int n_copied = Filer::copyRecursive(target, transfer_to);
+                    // TODO: More detailed copy data; copyRecursive could return a struct. Can exceptions be thrown by copyRecursive? How should they be handled?
+                    cout << "\nCopied " << n_copied << " files.";
+                }
+            }
+        } else {
+            cout << "\n" << target << " is not a directory.";
+            result = false;
+        }
+    } else {
+        cout << "\nNo root directory is set.";
+
+    }
+
+    // Write the config file, print result message. 
+    if(!result) {
+        cout << "\nFailed to execute command add.";
+    } else {
+        cout << "\nAdded " << alias << " to your templates.";
+        config.setInfo(alias, infotxt);
+        config.writeConfig();
+    }
+    
+    return result;
 }
 
 #pragma endregion parse
@@ -111,7 +244,7 @@ void Scaf::printHelp() {
         cout << "\n To use scaf, you must first set a template directory with the root command.\n";
     }
 
-    cout << "\n Use help <command> for more information about a specific command.\n";
+    cout << "\n Use `scaf help <command>` for more information about a specific command.\n";
 }
 
 void Scaf::printHelpRoot() {

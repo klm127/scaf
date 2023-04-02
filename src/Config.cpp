@@ -76,15 +76,18 @@ fs::path Config::getTemplateDir() {
     return templateDir;
 }
 
-void Config::setTemplateDir(fs::path new_path) {
+bool Config::setTemplateDir(fs::path new_path) {
+    bool result = false;
     if(!fs::exists(new_path)) {
-        cout << "The path " << new_path << " doesn't exist!" << endl;
+        cout << "\nThe path " << new_path << " doesn't exist!" << endl;
     }
     else if(!fs::is_directory(new_path)) {
-        cout << "Can't set template directory to a non-directory!" << endl;
+        cout << "\nCan't set template directory to a non-directory!" << endl;
     } else {
         templateDir = fs::canonical(new_path);
+        result = true;
     }
+    return result;
 }
 
 string Config::getInfo(string key) {
@@ -170,6 +173,7 @@ void Config::writeConfig() {
     file.open(configPath, ios::out);
     file << write.dump(4);
     file.close();
+    cout << "\nUpdated config.\n";
 }
 
 #pragma endregion readers_and_writers
