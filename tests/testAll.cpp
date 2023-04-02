@@ -1,3 +1,9 @@
+/*!
+    \file testAll.cpp
+    \brief Calls appropriate unit tests by parsing command line arguments.
+    \author Karl Miller
+    \date April 2023
+*/
 #include <string>
 #include <iostream>
 #include "TemplateTest.cpp"

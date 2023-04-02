@@ -1,3 +1,13 @@
+/*!
+    \file Template.cpp
+    \brief Definitions for Template class (deprecated).
+    \author Karl Miller
+    \date April 2023
+    \deprecated
+    \note Template is not currently used in the program!
+
+    It may be utilized on a future iteration and refactor.
+*/
 #include "Template.h"
 #include <filesystem>
 

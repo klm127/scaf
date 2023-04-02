@@ -1,4 +1,11 @@
-
+/*!
+    \file TemplateTest.cpp
+    \brief Provides tests for Template. See Template.h.
+    \author Karl Miller
+    \date April 2023
+    \note TemplateTest is deprecated! Template is not currently used in the program!
+    \deprecated 
+*/
 #include "QUnit.hpp"
 #include <iostream>
 #include "Template.h"

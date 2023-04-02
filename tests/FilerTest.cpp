@@ -1,8 +1,13 @@
-
-#include "QUnit.hpp"
+/*!
+    \file FilerTest.cpp
+    \brief Provides tests for Filer. See Filer.h.
+    \author Karl Miller
+    \date April 2023
+*/
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include "QUnit.hpp"
 #include "Filer.h"
 
 using namespace std;

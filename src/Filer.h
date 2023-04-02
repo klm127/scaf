@@ -1,5 +1,10 @@
 #pragma once
-
+/*!
+    \file Filer.h
+    \brief Declarations for Filer namespace.
+    \author Karl Miller
+    \date April 2023
+*/
 #include <filesystem>
 #include <map>
 #include <vector> 
@@ -8,7 +13,13 @@ using namespace std;
 namespace fs = std::filesystem;
 
 
+/*!
+    Filer provides functions wrapping various filesystem operations, such as copyRecursive and isEmpty, used by Scaf.
 
+    Particularly, Filer ignores `.git` folders when determining whether a directory is empty and when copying recursively.
+
+    It also provides functions for getting information about the contents of a folder.
+*/
 namespace Filer {
 
     /*!

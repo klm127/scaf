@@ -1,5 +1,12 @@
 #pragma once
-
+/*!
+    \file Template.h
+    \brief Declarations for Template class.
+    \author Karl Miller
+    \date April 2023
+    \deprecated
+    \note Template is not currently used in the program!
+*/
 #include <string>
 #include <vector>
 
@@ -8,7 +15,12 @@ using namespace std;
 /*!
     Template holds information about a given template, including its folder location and saved-user info.
 
-    As Config reads the saved program data, it instances Templates.
+    NOTE: TEMPLATE IS NOT CURRENTLY ACTUALLY USED IN THE PROGRAM!
+
+    Instead of instancing templates, scaf scans the directories within the root folder to get template names instead!
+    As Config reads the saved program data, it instances Templates. (It doesn't!)
+
+    Template has not been removed because it is well-tested and may be useful in a future refactor.
 */
 class Template {
     private:

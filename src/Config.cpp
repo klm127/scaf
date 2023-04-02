@@ -1,3 +1,10 @@
+/*!
+    \file Config.cpp
+    \brief Implementation for Config class.
+    \author Karl Miller
+    \date April 2023
+*/
+
 #ifdef _WIN32
 #include <windows.h>
 #elif

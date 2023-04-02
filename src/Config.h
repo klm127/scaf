@@ -1,4 +1,10 @@
 #pragma once
+/*!
+    \file Config.h
+    \brief Declarations for Config class.
+    \author Karl Miller
+    \date April 2023
+*/
 
 #include <string>
 #include <filesystem>

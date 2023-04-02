@@ -1,3 +1,10 @@
+/*!
+    \file Filer.cpp
+    \brief Definitions for Filer namespace.
+    \author Karl Miller
+    \date April 2023
+*/
+
 #include "Filer.h"
 #include <iostream>
 #include <bits/stdc++.h>

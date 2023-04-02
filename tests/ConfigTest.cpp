@@ -1,4 +1,9 @@
-
+/*!
+    \file ConfigTest.cpp
+    \brief Provides tests for Config. See Config.h.
+    \author Karl Miller
+    \date April 2023
+*/
 #include "QUnit.hpp"
 #include <iostream>
 #include <filesystem>

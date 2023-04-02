@@ -1,3 +1,9 @@
+/*!
+    \file Scaff.cpp
+    \brief Definitions for Scaff (command execution) class.
+    \author Karl Miller
+    \date April 2023
+*/
 #include <iostream>
 #include <string>
 #include <map>
@@ -31,7 +37,6 @@ bool promptYN(bool default_yn) {
     return result;
 }
 
-
 #pragma endregion utility
 
 #pragma region constructors
@@ -45,7 +50,6 @@ Scaf::Scaf(filesystem::path config_path) {
     config = Config(config_path);
     config.readConfig();
 }
-
 
 #pragma endregion constructors
 
@@ -651,7 +655,7 @@ void Scaf::printHelp() {
 void Scaf::printHelpRoot() {
     cout << "\n Scaf: Help for the root command:\n"
      << "\n\tSyntax: scaf root { . | subdir}\n"
-     << "\n\tSets the root template directory. This is where your templates will be saved."
+     << "\n\tRegisters the root template directory. This is where your templates will be saved."
      << "\n\tIf no subdir is provided, scaf will use the current directory as the root.\n";
 }
 void Scaf::printHelpAdd() {
