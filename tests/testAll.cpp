@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TemplateTest.cpp"
 #include "ConfigTest.cpp"
+#include "FilerTest.cpp"
 
 /*!
     Runs the tests.
@@ -14,6 +15,7 @@
 
 */
 int main(int argc, char ** argv) {
+    filesystem::create_directory("tmp");
     int errors;
     std::string test_choice;
     short verbosity = QUnit::normal;
@@ -40,11 +42,14 @@ int main(int argc, char ** argv) {
     if(test_choice == "template") {
         errors = TemplateTest(std::cerr, verbosity).run();
     } else if(test_choice == "all") {
-        errors = TemplateTest(std::cerr, verbosity).run() + ConfigTest(std::cerr, verbosity).run();
+        errors = TemplateTest(std::cerr, verbosity).run() + ConfigTest(std::cerr, verbosity).run() + FilerTest(std::cerr, verbosity).run();
     } else if(test_choice == "config") {
         errors = ConfigTest(std::cerr, verbosity).run();
-    }else {
+    } else if(test_choice == "filer") {
+        errors = FilerTest(std::cerr, verbosity).run();
+    } else {
         cout << "'" << test_choice << "' is not a valid test option. Try 'all'. \n";
     }
+    filesystem::remove_all("tmp");
     return errors;
 }

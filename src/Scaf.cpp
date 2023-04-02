@@ -76,6 +76,8 @@ bool Scaf::Help(int index, vector<string>& args) {
             printHelpLoad();
         } else if(args[index] == "rename") {
             printHelpRename();
+        } else if(args[index] == "list") {
+            printHelpList();
         } else {
             cout << "\nI don't have help on that topic.\n";
         }
@@ -159,6 +161,11 @@ void Scaf::printHelpRename() {
     cout << "\n Scaf: Help for the load command:\n"
      << "\n\tSyntax: scaf rename <template> <newname> \n"
      << "\n\tRenames a template.\n";
+}
+void Scaf::printHelpList() {
+    cout << "\n Scaf: Help for the list command:\n"
+     << "\n\tSyntax: scaf list \n"
+     << "\n\tLists all available templates.\n";
 }
 
 #pragma endregion endpoint

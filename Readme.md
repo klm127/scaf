@@ -22,6 +22,8 @@ Scaf works by maintaining directories of templates that the user supplies. When 
 
 `scaf rename <template> <newname>` Rename a given template. Info will also be moved over.
 
+`scaf list` List the available templates.
+
 `scaf help` Get help about scaf.
 
 # Compiling, Running

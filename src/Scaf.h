@@ -35,7 +35,7 @@ class Scaf {
         /*! Processes the Root command. */
         bool Root(int index, vector<string>& args);
 
-        
+
 
         /*! Prints overall program help. Occurs if no arguments are passed, 'help', or '?' is passed. */
         void printHelp();
@@ -54,5 +54,7 @@ class Scaf {
         void printHelpLoad();
         /*! Prints help for the rename command. */
         void printHelpRename();
+        /*! Prints help for the list command. */
+        void printHelpList();
     
 };

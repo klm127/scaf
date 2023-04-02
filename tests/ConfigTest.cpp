@@ -8,8 +8,8 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-const string tmp_conf = "./tests/testconf.json";
-const string tmp_tdir = "./tests/tmpl";
+const string tmp_conf = "./tmp/testconf.json";
+const string tmp_tdir = "./tmp/tmpl";
 
 class ConfigTest {
     QUnit::UnitTest qunit;
