@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"os"
 
 	"github.com/klm127/scaf/command"
 )
 
 func main() {
-	fmt.Printf("ran")
-	command.PromptYN(true)
+	args := os.Args
+	scaf := command.NewScaf()
+	scaf.Start(args)
 }
