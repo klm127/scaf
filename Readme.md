@@ -42,6 +42,8 @@ Scaf achieves this by automating the starting up of new digital projects of all 
 
 For more detail about the implementation, see the [web documentation](http://www.quaffingcode.com/scaf/html/index.html) or the `reference.pdf` file in this directory.
 
+_Note_: The original project was created in C++. I have switched it to Go because C++ is just a headache to use, and I was having linking issues I didn't feel like trying to resolve.
+
 # Commands
 
 `scaf root { . | subdir }` Registers the root directory for template storage. Makes the current directory or provided subdirectory the root for scaf templates to be saved. This command needs to be used to pick a template directory before scaf's other commands will become functional.
@@ -61,6 +63,13 @@ For more detail about the implementation, see the [web documentation](http://www
 `scaf rename <template> <newname>` Rename a given template. Info will also be moved over.
 
 `scaf help <command>` Get help about scaf.
+
+## Commands coming soon
+
+Ignores: Right now scaf ignores the .git directory and node_modules directory. Users may want to configure scaf to ignore other directories by default (like bin)
+`scaff ignore {directory_name_type}` Add a directory to the list of ignores
+`scaff show ignores` show the list of ignores
+`scaff unignore {directory_name_type}` unignore a directory name type
 
 # Getting Scaf
 
