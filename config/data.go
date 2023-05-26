@@ -27,7 +27,7 @@ func GetConfigFromFile(a_path string) (*configData, error) {
 	config_data.Ignores = make([]string, 0)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Printf("> No config exists at " + a_path + ". Creating.")
+			fmt.Println("> No config exists at " + a_path + ". Creating.")
 			loc, err = json.Marshal(config_data)
 			if err != nil {
 				return nil, err
@@ -50,7 +50,15 @@ func GetConfigFromFile(a_path string) (*configData, error) {
 func WriteConfig(a_path string, data *configData) {
 	marsh, err := json.Marshal(&data)
 	if err != nil {
-		log.Fatal("Failed to write config: " + err.Error())
+		log.Fatalln("Failed to write config: " + err.Error())
 	}
-	os.WriteFile(a_path, marsh, fs.ModeAppend)
+	err = os.WriteFile(a_path, marsh, fs.ModeAppend)
+	if err != nil {
+		log.Fatalln("Failed to write config: " + err.Error())
+	}
+}
+
+/* Writes the config back, refreshing it. */
+func (c *Config) Write() {
+	WriteConfig(c.configPath, c.data)
 }

@@ -5,10 +5,11 @@ import (
 	"strings"
 )
 
-func (s *Scaf) Help(args []string) bool {
+/* Help dispatches the help command by calling the appropriate printing function depending on the next arg. */
+func (s *Scaf) Help(args []string) {
 	if len(args) == 0 {
 		s.printHelp()
-		return true
+		return
 	}
 	check := strings.ToLower(args[0])
 	if check == "root" {
@@ -30,7 +31,6 @@ func (s *Scaf) Help(args []string) bool {
 	} else {
 		fmt.Println(" I don't have help on that topic. ")
 	}
-	return true
 }
 
 /* printCommandName pretty prints a string with a box around it, centered. */
@@ -64,6 +64,8 @@ func (s *Scaf) printHelp() {
 	if !s.config.HasTemplateDirectory() {
 		fmt.Println("\n Warning: You do not currently have a template directory loaded.")
 		fmt.Println(" To use scaf, you must first set a template directory with the root command. ")
+	} else {
+		fmt.Printf("\nYour template directory is currently set to: %s", s.config.GetTemplateDirectory())
 	}
 	fmt.Println("\n Use scaf help <command> for more information about a specific command.")
 }
