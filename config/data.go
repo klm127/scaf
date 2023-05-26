@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
 )
 
@@ -44,4 +45,12 @@ func GetConfigFromFile(a_path string) (*configData, error) {
 		return nil, err
 	}
 	return &config_data, nil
+}
+
+func WriteConfig(a_path string, data *configData) {
+	marsh, err := json.Marshal(&data)
+	if err != nil {
+		log.Fatal("Failed to write config: " + err.Error())
+	}
+	os.WriteFile(a_path, marsh, fs.ModeAppend)
 }
