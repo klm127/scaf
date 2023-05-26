@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 )
@@ -32,10 +31,7 @@ func GetConfigFromFile(a_path string) (*configData, error) {
 			if err != nil {
 				return nil, err
 			}
-			err = os.WriteFile(a_path, loc, fs.ModeAppend)
-			if err != nil {
-				return nil, err
-			}
+			WriteConfig(a_path, &config_data)
 			return &config_data, nil
 		}
 		return nil, err
@@ -52,7 +48,11 @@ func WriteConfig(a_path string, data *configData) {
 	if err != nil {
 		log.Fatalln("Failed to write config: " + err.Error())
 	}
-	err = os.WriteFile(a_path, marsh, fs.ModeAppend)
+	file, err := os.Create(a_path)
+	if err != nil {
+		log.Fatalln("Failed to write config: " + err.Error())
+	}
+	_, err = file.Write(marsh)
 	if err != nil {
 		log.Fatalln("Failed to write config: " + err.Error())
 	}
