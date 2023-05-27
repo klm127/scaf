@@ -52,7 +52,7 @@ _Note_: The original project was created in C++. I have switched it to Go becaus
 
 `scaf load <template> { subdirectory }` Scaffold one of your templates into the currect directory or the subdirectory if supplied.
 
-`scaf list {filter}` List the available templates. If a filter is provided, it will only list templates with alias matching prefix filter.
+`scaf list {filter}` List the available templates. If a filter is provided, it will only list templates with alias matching the filter regex.
 
 `scaf info <template>` Get a description of the given template.
 

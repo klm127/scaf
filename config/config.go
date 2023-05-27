@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-const config_file_name = "config.json"
+const config_file_name = "scaf.json"
 
 /*
 Config provides the functions and classes needed to load scaf's configuration.

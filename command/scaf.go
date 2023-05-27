@@ -39,6 +39,13 @@ func (s *Scaf) Start(args []string) {
 		case "add":
 			s.Add(args[2:])
 			s.config.Write()
+			break
+		case "load":
+			s.Load(args[2:])
+			break
+		case "list":
+			s.List(args[2:])
+			break
 		default:
 			fmt.Printf("\n'%s' is not a valid scaf command. Run scaf help to see the list of available commands.", check)
 		}

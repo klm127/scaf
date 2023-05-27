@@ -73,10 +73,6 @@ func (s *Scaf) Add(args []string) {
 	fmt.Println("Add completed succesfully.")
 }
 
-// get the add directory
-// recursively copy through the entire directory
-// on all levels, skip files and folders that match the "ignore" setting
-
 func AddFail(err error) {
 	log.Fatalln("Failed to process Add command: " + err.Error())
 }
