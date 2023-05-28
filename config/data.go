@@ -27,6 +27,7 @@ func GetConfigFromFile(a_path string) (*configData, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			fmt.Println("> No config exists at " + a_path + ". Creating.")
+			config_data.Ignores = append(config_data.Ignores, "\\.git", "node_modules")
 			loc, err = json.Marshal(config_data)
 			if err != nil {
 				return nil, err

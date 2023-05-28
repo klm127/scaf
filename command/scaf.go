@@ -54,9 +54,20 @@ func (s *Scaf) Start(args []string) {
 			s.Remove(args[2:])
 			s.config.Write()
 			break
+		case "ignore":
+			s.Ignore(args[2:])
+			s.config.Write()
+			break
+		case "unignore":
+			s.UnIgnore(args[2:])
+			s.config.Write()
+			break
 		case "rename":
 			s.Rename(args[2:])
 			s.config.Write()
+			break
+		case "show":
+			s.Show(args[2:])
 			break
 		default:
 			fmt.Printf("\n'%s' is not a valid scaf command. Run scaf help to see the list of available commands.", check)

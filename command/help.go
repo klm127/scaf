@@ -28,6 +28,19 @@ func (s *Scaf) Help(args []string) {
 		printHelpRename()
 	} else if check == "list" {
 		printHelpList()
+	} else if check == "ignore" {
+		printHelpIgnore()
+	} else if check == "unignore" {
+		printHelpUnignore()
+	} else if check == "show" {
+		if len(args) > 1 {
+			arg2 := strings.ToLower(args[1])
+			if arg2 == "ignores" {
+				printHelpShowIgnores()
+			} else {
+				fmt.Println(" I don't have help on that topic. ")
+			}
+		}
 	} else {
 		fmt.Println(" I don't have help on that topic. ")
 	}
@@ -60,13 +73,15 @@ func (s *Scaf) printHelp() {
 	fmt.Println(" It enables you to save project templates (scaffolds) in a special folder on your hard drive.")
 	fmt.Println(" When you want to create a project using one of these templates, scaf will copy the contents")
 	fmt.Println(" of the template into the folder you want to scaffold.")
-	fmt.Println("\n     Commands:  root, add, load, list, info, set, remove, rename")
+	fmt.Println("\n     Commands:  root, add, load, list, info, set, remove, rename, ignore, unignore, show ignores")
 	if !s.config.HasTemplateDirectory() {
 		fmt.Println("\n Warning: You do not currently have a template directory loaded.")
 		fmt.Println(" To use scaf, you must first set a template directory with the root command. ")
+		fmt.Println(" For example \"scaf root .\" to set root to the current directory.")
 	} else {
 		fmt.Printf("\nYour template directory is currently set to: %s", s.config.GetTemplateDirectory())
 	}
+	fmt.Println("\n Your config is located at ", s.config.GetPath()+".")
 	fmt.Println("\n Use scaf help <command> for more information about a specific command.")
 }
 
@@ -145,6 +160,31 @@ func printHelpList() {
 	fmt.Println("\n\tSyntax: scaf list { filter }")
 	fmt.Println("\nLists all available templates.")
 	fmt.Println("If filter is provided, only lists those that start with filter.")
+}
+
+func printHelpIgnore() {
+	printCommandName("ignore")
+	fmt.Println("Scaf: Help for the ignore command:")
+	fmt.Println("\n\tSyntax: scaf ignore <regex string>")
+	fmt.Println("\nAdds a pattern to the configuration indicating files to ignore.")
+	fmt.Println("The argument should be a regular expression, and some characters will have to be escaped with '\\'. ")
+	fmt.Println("The regex syntax is described here: https://github.com/google/re2/wiki/Syntax")
+	fmt.Println("When scaf first creates a scaf.json config file, it defaults to setting ingores to \\.git and node_modules.")
+}
+
+func printHelpUnignore() {
+	printCommandName("unignore")
+	fmt.Println("Scaf: Help for the unignore command:")
+	fmt.Println("\n\tSyntax: scaf unignore <regex string>")
+	fmt.Println("\nRemoves a pattern that was previously ignored from the configuration.")
+	fmt.Println("\nThe argument should be an existing string. See scaff show ignores")
+}
+
+func printHelpShowIgnores() {
+	printCommandName("show ignores")
+	fmt.Println("Scaf: Help for the show ignores command:")
+	fmt.Println("\n\tSyntax: scaf show ignores")
+	fmt.Println("\nShows the list of patterns that are being ignored.")
 }
 
 // add ignores

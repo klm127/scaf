@@ -67,9 +67,9 @@ _Note_: The original project was created in C++. I have switched it to Go becaus
 ## Commands coming soon
 
 Ignores: Right now scaf ignores the .git directory and node_modules directory. Users may want to configure scaf to ignore other directories by default (like bin)
-`scaff ignore {directory_name_type}` Add a directory to the list of ignores
+`scaff ignore <regex> ` Add a pattern to the list of ignores
 `scaff show ignores` show the list of ignores
-`scaff unignore {directory_name_type}` unignore a directory name type
+`scaff unignore <regex>` unignore a pattern name type
 
 # Getting Scaf
 
