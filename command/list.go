@@ -9,6 +9,7 @@ import (
 	"github.com/klm127/scaf/util"
 )
 
+// Runs the 'list' command, showing available templates if possible
 func (s *Scaf) List(args []string) {
 	fail := util.Failer("Load")
 	if !s.config.HasTemplateDirectory() {
@@ -23,6 +24,7 @@ func (s *Scaf) List(args []string) {
 		s.list_filtered(dirents, args[0])
 		return
 	}
+	// getting the longest helps with pretty printing
 	longest := getLongestName(dirents)
 	fmt.Println("Available templates: ")
 	for _, v := range dirents {

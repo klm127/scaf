@@ -4,22 +4,22 @@ import (
 	"log"
 )
 
-type failer_struct struct {
+type TFailer struct {
 	cat string
 }
 
-func Failer(name string) failer_struct {
-	return failer_struct{name}
+func Failer(name string) TFailer {
+	return TFailer{name}
 }
 
-func (f *failer_struct) Err(err error) {
+func (f *TFailer) Err(err error) {
 	f.Msg(err.Error())
 }
 
-func (f *failer_struct) Msg(msg string) {
+func (f *TFailer) Msg(msg string) {
 	log.Fatalln(f.cat, "failed!\n\tReason: ", msg)
 }
 
-func (f *failer_struct) Msg2(msg string, err error) {
+func (f *TFailer) Msg2(msg string, err error) {
 	f.Msg(msg + "\n\nError: " + err.Error())
 }
