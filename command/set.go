@@ -2,11 +2,11 @@ package command
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/klm127/scaf/util"
 )
 
+// Sets the info, saves in scaf .json
 func (s *Scaf) Set(args []string) {
 	fail := util.Failer("Set")
 	if len(args) < 2 {
@@ -16,17 +16,7 @@ func (s *Scaf) Set(args []string) {
 	targ := args[0]
 	info := args[1]
 
-	dirents, err := os.ReadDir(s.config.GetTemplateDirectory())
-	if err != nil {
-		fail.Err(err)
-	}
-	exists := false
-	for _, dirent := range dirents {
-		if dirent.Name() == targ {
-			exists = true
-			break
-		}
-	}
+	exists := s.config.HasDir(targ)
 	if !exists {
 		fmt.Println(targ, "isn't a currently loaded template, but the info will be set for use whenever it is loaded.")
 	}

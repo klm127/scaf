@@ -43,7 +43,7 @@ func (s *Scaf) Add(args []string) {
 	}
 
 	// if an alias already exists, you have the option to delete it, defaulting to don't delete.
-	exists := filer.DirExists(template_dir, alias)
+	exists := s.config.HasDir(alias)
 	if exists {
 		fmt.Println("A template named " + alias + " already exists. Would you like to delete it? ")
 		delete := PromptYN(false)

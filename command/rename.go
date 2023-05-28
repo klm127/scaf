@@ -40,5 +40,10 @@ func (s *Scaf) Rename(args []string) {
 		fail.Err(err)
 	}
 
-	fmt.Println("Renamed", target, "to", rename_to)
+	original_info := s.config.GetInfo(target)
+
+	fmt.Println("Renamed template", target, "to", rename_to+".")
+	if len(original_info) > 0 {
+		s.Set([]string{rename_to, original_info})
+	}
 }

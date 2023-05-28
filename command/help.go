@@ -74,7 +74,7 @@ func (s *Scaf) printHelp() {
 func printHelpRoot() {
 	printCommandName("root")
 	fmt.Println("Scaf: Help for the root command:")
-	fmt.Println("\n\tSyntax: scaf root { . | subdir}")
+	fmt.Println("\n\tSyntax: scaf root { . | subdir }")
 	fmt.Println("\nRegisters the root template directory. This is where your templates will be saved.")
 	fmt.Println("If no subdir is provided, scaf will use the current directory as the root.")
 }
@@ -105,7 +105,7 @@ func printHelpInfo() {
 func printHelpSet() {
 	printCommandName("set")
 	fmt.Println("Scaf: Help for the set command:")
-	fmt.Println("\n\tSyntax: scaf set <template> {infotext}")
+	fmt.Println("\n\tSyntax: scaf set <template> { infotext }")
 	fmt.Println("\nSets the info text for a template.")
 	fmt.Println("You can check this info later with the info command.")
 	fmt.Println("It's useful for remembering what a template is.")
@@ -142,7 +142,7 @@ func printHelpRename() {
 func printHelpList() {
 	printCommandName("list")
 	fmt.Println("Scaf: Help for the list command:")
-	fmt.Println("\n\tSyntax: scaf list {filter}")
+	fmt.Println("\n\tSyntax: scaf list { filter }")
 	fmt.Println("\nLists all available templates.")
 	fmt.Println("If filter is provided, only lists those that start with filter.")
 }

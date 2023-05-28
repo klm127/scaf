@@ -46,6 +46,18 @@ func (s *Scaf) Start(args []string) {
 		case "list":
 			s.List(args[2:])
 			break
+		case "set":
+			s.Set(args[2:])
+			s.config.Write()
+			break
+		case "remove":
+			s.Remove(args[2:])
+			s.config.Write()
+			break
+		case "rename":
+			s.Rename(args[2:])
+			s.config.Write()
+			break
 		default:
 			fmt.Printf("\n'%s' is not a valid scaf command. Run scaf help to see the list of available commands.", check)
 		}
