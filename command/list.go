@@ -31,7 +31,7 @@ func (s *Scaf) List(args []string) {
 	for _, v := range dirents {
 		printListLine(longest, v.Name(), s.config.GetInfo(v.Name()))
 	}
-	fmt.Println("\nLoad command finished.")
+	fmt.Println("\nList command finished.")
 
 }
 

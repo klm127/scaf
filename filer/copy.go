@@ -31,11 +31,25 @@ func (result *CopyResult) Print() {
 	fmt.Println("  Copied to:   ", result.to)
 	fmt.Println("   - copied", result.folders, "folders.")
 	fmt.Println("   - copied", result.files, "files.")
-	fmt.Println("   - copied", result.bytes, "bytes.")
+	fmt.Println("   - copied", getSizeString(result.bytes)+".")
 	for k := range result.skipDetails {
 		fmt.Println("   - skipped", result.skipDetails[k], "instances of", k)
 	}
 	fmt.Println("   Operation took", result.time)
+}
+
+func getSizeString(size int64) string {
+	if size < 1024 {
+		return fmt.Sprint(size, "bytes")
+	}
+	if size < 1048576 {
+		return fmt.Sprintf("%2f kilobytes", float32(size)/1024)
+	}
+	if size < 1073741824 {
+		return fmt.Sprintf("%2f megabytes", float32(size)/1048576)
+	}
+	return fmt.Sprintf("%2f gigabytes", float32(size)/1073741824)
+
 }
 
 func (result *CopyResult) PrintErrors() {
